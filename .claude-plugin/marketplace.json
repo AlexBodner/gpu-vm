@@ -1,16 +1,16 @@
 {
-  "name": "alexbodner-gpu-vm",
+  "name": "alexbodner-gcloud-gpu-agent",
   "owner": {
     "name": "Alex Bodner"
   },
   "description": "Tools for driving cloud GPUs from Claude Code.",
   "plugins": [
     {
-      "name": "gpu-vm",
+      "name": "gcloud-gpu-agent",
       "source": "./",
       "description": "Launch Google Cloud GPU VMs (L4/A100/H100) and run code on them over SSH.",
       "version": "1.0.0",
-      "homepage": "https://github.com/AlexBodner/gpu-vm",
+      "homepage": "https://github.com/AlexBodner/gcloud-gpu-agent",
       "license": "MIT",
       "keywords": ["gpu", "gcloud", "cloud", "machine-learning", "cuda"]
     }

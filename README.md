@@ -10,8 +10,8 @@ script wrapping `gcloud`, so it also works as a plain CLI.
 **Install the skill (Claude Code):**
 
 ```text
-/plugin marketplace add AlexBodner/gpu-vm
-/plugin install gpu-vm@alexbodner-gpu-vm
+/plugin marketplace add AlexBodner/gcloud-gpu-agent
+/plugin install gcloud-gpu-agent@alexbodner-gcloud-gpu-agent
 ```
 
 Now just talk to Claude:
@@ -28,7 +28,7 @@ Claude runs the right commands under the hood and reads the output back for you.
 The same tool works without an agent:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AlexBodner/gpu-vm/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/install.sh | bash
 ```
 
 ```bash
@@ -71,7 +71,7 @@ upload, tmux jobs) already handled.
 <summary>Without the installer script</summary>
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AlexBodner/gpu-vm/main/gpu-vm.sh \
+curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/gpu-vm.sh \
   -o ~/.local/bin/gpu-vm && chmod +x ~/.local/bin/gpu-vm
 ```
 Or just clone and run `./gpu-vm.sh`.
