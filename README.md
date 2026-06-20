@@ -30,7 +30,7 @@ curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/in
 
 # 2. Add the skill to your project (or ~/.codex/skills/ for global use)
 mkdir -p .codex/skills/gcloud-gpu-agent
-curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/skills/gcloud-gpu-agent/SKILL.md \
+curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/.codex/skills/gcloud-gpu-agent/SKILL.md \
   -o .codex/skills/gcloud-gpu-agent/SKILL.md
 ```
 
