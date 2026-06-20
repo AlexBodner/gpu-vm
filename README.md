@@ -7,6 +7,14 @@ your repo, kicks off the job in a detached session, streams the logs, pulls your
 results, and reminds you to shut it down. Works with **Claude Code** and **Codex CLI**.
 Powered by one dependency-free Bash script wrapping `gcloud`, so it also works as a plain CLI.
 
+## Agent setup
+
+Install the skill first, then do the one-time Google Cloud setup below. After
+that, you can ask the agent to handle VM creation, code upload, job execution,
+log streaming, result download, and shutdown.
+
+### 1. Install the agent skill
+
 **Claude Code:**
 
 ```text
@@ -22,11 +30,46 @@ curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/in
 
 # 2. Add the skill to your project (or ~/.codex/skills/ for global use)
 mkdir -p .codex/skills/gcloud-gpu-agent
-curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/.codex/skills/gcloud-gpu-agent/SKILL.md \
+curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/skills/gcloud-gpu-agent/SKILL.md \
   -o .codex/skills/gcloud-gpu-agent/SKILL.md
 ```
 
-Now just talk to your agent:
+The installer drops `gpu-vm` into `~/.local/bin` — make sure that's on your `PATH`.
+
+### 2. Install Google Cloud prerequisites
+
+The agent can run `gpu-vm` commands for you, but your machine still needs a
+working Google Cloud CLI login and a project with GPU quota.
+
+```bash
+# macOS:
+brew install --cask google-cloud-sdk
+
+# Other platforms:
+# https://cloud.google.com/sdk/docs/install
+
+gcloud auth login
+gcloud config set project YOUR_PROJECT_ID
+```
+
+Check that setup is ready:
+
+```bash
+gcloud auth list --filter=status:ACTIVE --format="value(account)"
+gcloud config get-value project
+```
+
+You also need **GPU quota**. New projects often start at 0 — request it under
+**IAM & Admin → Quotas** (search e.g. `NVIDIA_L4_GPUS`). Approval can take minutes
+to a day.
+
+```bash
+# Check your current GPU quota in the default region:
+gcloud compute regions describe us-central1 \
+  --format="value(quotas)" | tr ';' '\n' | grep -i gpus
+```
+
+### 3. Tell the agent what you want
 
 > *"Spin up an A100, push this repo, and start `train.py` in tmux."*
 > *"Tail the training log."*  ·  *"Pull the checkpoints and stop the VM."*
@@ -40,10 +83,6 @@ The agent runs the right commands under the hood and reads the output back for y
 The same tool works without an agent:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/install.sh | bash
-```
-
-```bash
 GPU=nvidia-l4 gpu-vm create                         # 🚀 a 24GB GPU box, ~90 seconds
 gpu-vm push ~/my-project                            # 📦 upload (private repos OK)
 gpu-vm run "cd my-project && python train.py" train # 🏃 detached job in tmux
@@ -52,7 +91,11 @@ gpu-vm pull my-project/outputs ./outputs            # ⬇️  bring results home
 gpu-vm stop                                         # ⏸  stop billing (disk kept)
 ```
 
-The installer drops `gpu-vm` into `~/.local/bin` — make sure that's on your `PATH`.
+If you only want the CLI without the agent skill, install it directly:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/AlexBodner/gcloud-gpu-agent/main/install.sh | bash
+```
 
 ---
 
@@ -97,9 +140,7 @@ gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
 ```
 
-You also need **GPU quota**. New projects often start at 0 — request it under
-**IAM & Admin → Quotas** (search e.g. `NVIDIA_L4_GPUS`). Approval can take minutes
-to a day.
+You also need **GPU quota**. New projects often start at 0.
 
 ```bash
 # Check your current GPU quota:
